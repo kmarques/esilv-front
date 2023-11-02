@@ -1,11 +1,13 @@
 export default function MultiButton({ genX = 1, ...props }) {
-  const buttons = [];
-
-  for (let i = 0; i < genX; i++) {
-    buttons.push(<ButtonBase {...props} />);
-  }
-
-  return buttons;
+  //const buttons = [];
+  //
+  //for (let i = 0; i < genX; i++) {
+  //  buttons.push(<ButtonBase {...props} />);
+  //}
+  //
+  //return buttons;
+  // <=>
+  return Array.from({length: genX}, () => <ButtonBase {...props} />);
 }
 
 export function ButtonBase({

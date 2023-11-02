@@ -49,6 +49,8 @@ export default function ThemeConfigurator({ initialValues, onSubmit }) {
         name="buttonColor"
         id="buttonColor"
       />
+      <input type="date"/>
+      <input type="time"/>
       <input type="submit" value="Change" />
     </form>
   );

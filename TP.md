@@ -2,7 +2,7 @@
 ## Consignes
 
 Créer un gestionnaire de liste de tâches
-- Pouvoir lister un ensemble de tâches qualifiées par
+- Pouvoir lister un ensemble de tâches (cf Technical Details)
 - Pouvoir ajouter une tâche
 - Pouvoir passer une tâche en completed ou inversement en cliquant dessus
 - Pouvoir modifier complêtement une tâche

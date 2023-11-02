@@ -4,6 +4,7 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import MultiButton, { ButtonBase } from "./components/Button";
 import ThemeConfigurator from "./components/ThemeConfigurator";
+import TaskList from "./components/TaskList/TaskList";
 
 //let cursor = 0;
 //const data = [];
@@ -81,6 +82,7 @@ function App() {
           });
         }}
       />
+      <TaskList />
       <div className="card">
         <button
           style={theme.button}
