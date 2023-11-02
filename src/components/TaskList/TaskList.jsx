@@ -22,22 +22,42 @@ export default function TaskList() {
   const [tasks, setTasks] = useState([]);
 
   const deleteTask = (task) => {
-    setTasks(tasks.filter((t) => t.id !== task.id));
+    fetch("http://localhost:3000/tasks/" + task.id, {
+      method: "DELETE",
+    }).then((res) => res.ok && setTasks(tasks.filter((t) => t.id !== task.id)));
   };
 
   const addTask = (task) => {
-    setTasks([task, ...tasks]);
+    fetch("http://localhost:3000/tasks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(task),
+    })
+      .then((res) => res.json())
+      .then((data) => setTasks([data, ...tasks]));
   };
 
   const editTask = (task, newValue) => {
-    setTasks(
-      tasks.map((t) => {
-        if (t.id === task.id) {
-          t = { ...t, ...newValue };
-        }
-        return t;
-      })
-    );
+    fetch("http://localhost:3000/tasks/" + task.id, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newValue),
+    })
+      .then((res) => res.json())
+      .then((data) =>
+        setTasks(
+          tasks.map((t) => {
+            if (t.id === data.id) {
+              t = data;
+            }
+            return t;
+          })
+        )
+      );
   };
 
   const toggleTaskStatus = (task) => {
@@ -55,7 +75,9 @@ export default function TaskList() {
 
   useEffect(() => {
     console.log("Task list mounted");
-    setTimeout(() => setTasks(defaultTasks), [3000]);
+    fetch("http://localhost:3000/tasks")
+      .then((res) => res.json())
+      .then((data) => setTasks(data));
     return () => {
       console.log("Task list will unmount");
     };
