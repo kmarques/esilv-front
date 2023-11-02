@@ -82,7 +82,7 @@ function App() {
           });
         }}
       />
-      <TaskList />
+      {displayLogo && <TaskList />}
       <div className="card">
         <button
           style={theme.button}

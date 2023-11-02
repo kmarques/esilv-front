@@ -15,7 +15,3 @@ Tâche:
 - un status (bool)
 - une date (date)
 - un id unique (int)
-
-## Bonus
-- Pouvoir filtrer les tâches par status et titre
-- Grouper les tâches par status (completed en bas et non completed en haut)
