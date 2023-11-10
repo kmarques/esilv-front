@@ -1,3 +1,6 @@
+import { useContext } from "react";
+import { ThemeContext } from "../contexts/ThemeContext";
+
 export default function MultiButton({ genX = 1, ...props }) {
   //const buttons = [];
   //
@@ -7,7 +10,7 @@ export default function MultiButton({ genX = 1, ...props }) {
   //
   //return buttons;
   // <=>
-  return Array.from({length: genX}, () => <ButtonBase {...props} />);
+  return Array.from({ length: genX }, () => <ButtonBase {...props} />);
 }
 
 export function ButtonBase({
@@ -18,11 +21,12 @@ export function ButtonBase({
   component: Component = "button",
   style = {},
 }) {
+  const { theme } = useContext(ThemeContext);
   const computedStyle = {
-    backgroundColor: "green",
+    ...(theme?.button ?? {}),
     display: "flex",
     alignItems: "center",
-    ...style
+    ...style,
   };
 
   title = children ?? title;

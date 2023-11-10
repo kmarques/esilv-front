@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import MultiButton, { ButtonBase } from "./components/Button";
 import ThemeConfigurator from "./components/ThemeConfigurator";
 import TaskList from "./components/TaskList/TaskList";
+import { ThemeContext } from "./contexts/ThemeContext";
+import TaskListProvider from "./contexts/TaskListContext";
+import TaskIcon from "./components/TaskList/TaskIcon";
 
 //let cursor = 0;
 //const data = [];
@@ -20,35 +23,12 @@ import TaskList from "./components/TaskList/TaskList";
 function App() {
   const [count, setCount] = useState(0);
   const [displayLogo, setDisplayLogo] = useState(false);
-  const [theme, setTheme] = useState({
-    h1: {
-      backgroundColor: "#0000FF",
-      color: "#FF0000",
-      border: "10px dotted #FFC0CB",
-    },
-    button: {
-      backgroundColor: "#00FF00",
-      color: "#FFFF00",
-    },
-  });
+  const { theme, toggleH1Theme } = useContext(ThemeContext);
   //React.createElement(
   //  "div",
   //  null,
   //  displayLogo && [React.createElement("a"), React.createElement("a")]
   //);
-  const toggleH1Theme = () => {
-    const bg = theme.h1.backgroundColor;
-    const color = theme.h1.color;
-
-    setTheme({
-      ...theme,
-      h1: {
-        ...theme.h1,
-        backgroundColor: color,
-        color: bg,
-      },
-    });
-  };
 
   return (
     <>
@@ -66,23 +46,13 @@ function App() {
         {!displayLogo && <p>Logos masqués</p>}
       </div>
       <h1 style={theme.h1}>Vite + React</h1>
-      <ThemeConfigurator
-        initialValues={theme}
-        onSubmit={(themeValues) => {
-          setTheme({
-            ...theme,
-            h1: {
-              ...theme.h1,
-              ...themeValues.h1,
-            },
-            button: {
-              ...theme.button,
-              ...themeValues.button,
-            },
-          });
-        }}
-      />
-      {displayLogo && <TaskList />}
+      <ThemeConfigurator />
+      {displayLogo && (
+        <TaskListProvider>
+          <TaskIcon />
+          <TaskList />
+        </TaskListProvider>
+      )}
       <div className="card">
         <button
           style={theme.button}
@@ -91,14 +61,12 @@ function App() {
           count is {count}
         </button>
         <MultiButton
-          style={theme.button}
           genX={5}
           title="Button 1"
           variant="rounded"
           onClick={() => console.log("Coucou from Button 1")}
         />
         <ButtonBase
-          style={theme.button}
           variant="square"
           onClick={() => setDisplayLogo(!displayLogo)}
         >
@@ -106,9 +74,8 @@ function App() {
           Toggle Logo
         </ButtonBase>
         <ButtonBase
-          style={theme.button}
           component="div"
-          title="Button 3"
+          title="Toggle H1 Theme"
           onClick={() => {
             toggleH1Theme();
             console.log("Button 3 is clicked!");

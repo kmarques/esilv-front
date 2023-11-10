@@ -1,4 +1,8 @@
-export default function ThemeConfigurator({ initialValues, onSubmit }) {
+import { useContext } from "react";
+import { ThemeContext } from "../contexts/ThemeContext";
+
+export default function ThemeConfigurator() {
+  const { theme: initialValues, setTheme } = useContext(ThemeContext);
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -14,7 +18,7 @@ export default function ThemeConfigurator({ initialValues, onSubmit }) {
       },
     };
 
-    onSubmit(formValues);
+    setTheme(formValues);
   };
 
   return (
@@ -49,8 +53,8 @@ export default function ThemeConfigurator({ initialValues, onSubmit }) {
         name="buttonColor"
         id="buttonColor"
       />
-      <input type="date"/>
-      <input type="time"/>
+      <input type="date" />
+      <input type="time" />
       <input type="submit" value="Change" />
     </form>
   );
