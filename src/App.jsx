@@ -3,6 +3,7 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import Button from "./components/Button";
+import Table from "./components/Table";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -100,6 +101,13 @@ function App() {
             ))}
           {list.length === 0 && <li>No items</li>}
         </ul>
+        <Table
+          data={[
+            { id: 1, name: "Dupond", role: "Admin" },
+            { id: 1, name: "Dupond", role: "Admin" },
+          ]}
+        />
+        <Table data={[]} />
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>

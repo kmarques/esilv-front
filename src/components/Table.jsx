@@ -29,3 +29,59 @@
  * |        1 item |
  * |---------------|
  */
+
+import { useState } from "react";
+
+export default function Table({ data }) {
+  const columnKeys = data.length ? Object.keys(data[0]) : [""];
+
+  const [hiddenColumns, setHiddenColumns] = useState([]);
+
+  return (
+    <table>
+      <thead>
+        {hiddenColumns.length > 0 && (
+          <tr>
+            <td colSpan={columnKeys.length}>
+              <button onClick={() => setHiddenColumns([])}>Display all</button>
+            </td>
+          </tr>
+        )}
+        <tr>
+          {columnKeys
+            .filter((key) => !hiddenColumns.includes(key) && key !== "")
+            .map((key) => (
+              <th>
+                {key}{" "}
+                <button
+                  onClick={() =>
+                    setHiddenColumns((current) => [...current, key])
+                  }
+                >
+                  -
+                </button>
+              </th>
+            ))}
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((item) => (
+          <tr>
+            {Object.entries(item)
+              .filter(([key]) => !hiddenColumns.includes(key))
+              .map(([_, value]) => (
+                <td>{value}</td>
+              ))}
+          </tr>
+        ))}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colSpan={columnKeys.length}>
+            {data.length} item{data.length > 1 && "s"}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  );
+}
