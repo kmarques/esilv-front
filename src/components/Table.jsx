@@ -51,7 +51,7 @@ export default function Table({ data }) {
           {columnKeys
             .filter((key) => !hiddenColumns.includes(key) && key !== "")
             .map((key) => (
-              <th>
+              <th key={key}>
                 {key}{" "}
                 <button
                   onClick={() =>
@@ -66,11 +66,11 @@ export default function Table({ data }) {
       </thead>
       <tbody>
         {data.map((item) => (
-          <tr>
+          <tr key={`${item.source}-${item.id}`}>
             {Object.entries(item)
               .filter(([key]) => !hiddenColumns.includes(key))
-              .map(([_, value]) => (
-                <td>{value}</td>
+              .map(([key, value]) => (
+                <td key={key}>{value}</td>
               ))}
           </tr>
         ))}

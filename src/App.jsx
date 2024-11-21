@@ -4,6 +4,24 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import Button from "./components/Button";
 import Table from "./components/Table";
+import Carousel from "./components/Carousel";
+const images = [
+  {
+    id: 1,
+    imageUrl: "https://picsum.photos/200?random=1",
+    name: "Image 1",
+  },
+  {
+    id: 2,
+    imageUrl: "https://picsum.photos/200?random=2",
+    name: "Image 2",
+  },
+  {
+    id: 3,
+    imageUrl: "https://picsum.photos/200?random=3",
+    name: "Image 3",
+  },
+];
 
 function App() {
   const [count, setCount] = useState(0);
@@ -85,11 +103,11 @@ function App() {
         <ul>
           {Array.from(
             { length: count },
-            (_, index) => index % 2 === 0 && <li>Item #{index}</li>
+            (_, index) => index % 2 === 0 && <li key={index}>Item #{index}</li>
           )}
           {Array.from(
             { length: count },
-            (_, index) => index % 2 === 0 && <li>Item #{index}</li>
+            (_, index) => index % 2 === 0 && <li key={index}>Item #{index}</li>
           ).length === 0 && <li>No items</li>}
         </ul>
         <h2>Itération classique</h2>
@@ -97,17 +115,30 @@ function App() {
           {list
             .filter((value) => value % 2 === 0)
             .map((value) => (
-              <li>Item #{value}</li>
+              <li key={value}>Item #{value}</li>
             ))}
           {list.length === 0 && <li>No items</li>}
         </ul>
         <Table
           data={[
-            { id: 1, name: "Dupond", role: "Admin" },
-            { id: 1, name: "Dupond", role: "Admin" },
+            { id: 1, name: "Dupond", role: "Admin", source: "User" },
+            { id: 1, name: "Dupond", role: "Admin", source: "Client" },
           ]}
         />
         <Table data={[]} />
+        <Carousel data={images} />
+        <Carousel data={images} withArrows />
+        <Carousel data={images} withPagination />
+        <Carousel data={images} withPagination withArrows />
+        {displayLogo && (
+          <Carousel
+            data={images}
+            withPagination
+            withArrows
+            prefetch={1}
+            autoPlay={true}
+          />
+        )}
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
