@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * Créer un composant "Carousel" prenant en entrée
@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
  * une props "prefetch" (default: 0) permettant de précharger les images des items à gauche et à droite du carousel
  * une props "withKeyboardShortcuts" (default: false) permettant de switcher les images avec les flèches Gauche/Droite
  *    Bonus: withKeyboardShortcuts peut prendre en valeur un booléen ou un objet contenant les clés "left", "right" associé à un keyCode (default: {left: "ArrowLeft", right: "ArrowRight"})
+ * BONUS: une props "swipeable" permettant de switcher en swipant gauche ou droite
  *
  * Exemple:
  *
@@ -49,8 +50,11 @@ export default function Carousel({
   withPagination = false,
   prefetch = 0,
   autoPlay = false,
+  withKeyboardShortcuts = false,
+  swipeable = false,
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const intervalId = useRef();
 
   //useEffect(() => {
   //  console.log("After Update", currentIndex);
@@ -65,15 +69,84 @@ export default function Carousel({
   //    console.log("Before Unmount");
   //  };
   //}, []);
+  function initAutoPlay() {
+    if (intervalId.current) {
+      clearInterval(intervalId.current);
+      intervalId.current = undefined;
+    }
+    intervalId.current = setInterval(nextImage, 1000);
+    return () => {
+      if (intervalId.current) {
+        clearInterval(intervalId.current);
+        intervalId.current = undefined;
+      }
+    };
+  }
 
   useEffect(() => {
     if (autoPlay) {
-      const intervalId = setInterval(nextImage, 1000);
-      return () => {
-        clearInterval(intervalId);
-      };
+      return initAutoPlay();
     }
   }, [autoPlay]);
+
+  useEffect(() => {
+    if (withKeyboardShortcuts) {
+      function handleShortcut(event) {
+        const key = event.key;
+        switch (key) {
+          case withKeyboardShortcuts?.left ?? "ArrowLeft":
+            prevImage();
+            break;
+          case withKeyboardShortcuts?.right ?? "ArrowRight":
+            nextImage();
+            break;
+        }
+        if (autoPlay) initAutoPlay();
+      }
+      window.addEventListener("keyup", handleShortcut);
+
+      return () => {
+        window.removeEventListener("keyup", handleShortcut);
+      };
+    }
+  }, [withKeyboardShortcuts]);
+
+  useEffect(() => {
+    if (swipeable) {
+      let start;
+      function handleSwipeStart(event) {
+        start = event.clientX;
+        if (event.dataTransfer) {
+          event.dataTransfer.effectAllowed = "none";
+          event.dataTransfer.dropEffect = "none";
+        }
+      }
+      function handleSwipeEnd(event) {
+        const end = event.clientX;
+        const dir = start > end ? "left" : "right";
+        switch (dir) {
+          case "left":
+            prevImage();
+            break;
+          case "right":
+            nextImage();
+            break;
+        }
+        if (autoPlay) initAutoPlay();
+      }
+      window.addEventListener("touchstart", handleSwipeStart);
+      window.addEventListener("touchend", handleSwipeEnd);
+      window.addEventListener("dragstart", handleSwipeStart);
+      window.addEventListener("dragend", handleSwipeEnd);
+
+      return () => {
+        window.removeEventListener("touchstart", handleSwipeStart);
+        window.removeEventListener("touchend", handleSwipeEnd);
+        window.removeEventListener("dragstart", handleSwipeStart);
+        window.removeEventListener("dragend", handleSwipeEnd);
+      };
+    }
+  }, [swipeable]);
 
   function nextImage() {
     setCurrentIndex((prevIndex) =>
@@ -81,7 +154,9 @@ export default function Carousel({
     );
   }
   function prevImage() {
-    if (currentIndex !== 0) setCurrentIndex((prevIndex) => prevIndex - 1);
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? data.length - 1 : prevIndex - 1
+    );
   }
 
   const startIndex = currentIndex - prefetch;

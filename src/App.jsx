@@ -5,6 +5,7 @@ import "./App.css";
 import Button from "./components/Button";
 import Table from "./components/Table";
 import Carousel from "./components/Carousel";
+import UserList from "./views/Users/List";
 const images = [
   {
     id: 1,
@@ -126,9 +127,13 @@ function App() {
           ]}
         />
         <Table data={[]} />
-        <Carousel data={images} />
-        <Carousel data={images} withArrows />
-        <Carousel data={images} withPagination />
+        <Carousel data={images} swipeable={true} />
+        <Carousel data={images} withArrows withKeyboardShortcuts={true} />
+        <Carousel
+          data={images}
+          withPagination
+          withKeyboardShortcuts={{ left: "a", right: "z" }}
+        />
         <Carousel data={images} withPagination withArrows />
         {displayLogo && (
           <Carousel
@@ -137,8 +142,10 @@ function App() {
             withArrows
             prefetch={1}
             autoPlay={true}
+            withKeyboardShortcuts={true}
           />
         )}
+        <UserList />
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
