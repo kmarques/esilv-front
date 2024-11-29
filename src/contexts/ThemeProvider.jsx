@@ -8,6 +8,16 @@ export default function ThemeProvider({ children }) {
       backgroundColor: "green",
       color: "red",
     },
+    alert: {
+      success: {
+        backgroundColor: "green",
+        color: "white",
+      },
+      danger: {
+        backgroundColor: "red",
+        color: "white",
+      },
+    },
   });
 
   useEffect(() => {

@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { ThemeContext } from "../contexts/ThemeProvider";
+import useTheme from "../hooks/useTheme";
 
 export default function Button({
   title = "Click on my big big button",
@@ -12,10 +11,10 @@ export default function Button({
   children,
   ...others
 }) {
-  const { theme } = useContext(ThemeContext);
+  const themeButton = useTheme("button");
   const style = {
-    backgroundColor: backgroundColor ?? theme.button.backgroundColor,
-    color: color ?? theme.button.color,
+    backgroundColor: backgroundColor ?? themeButton.backgroundColor,
+    color: color ?? themeButton.color,
     padding: "10px",
     border: "none",
     borderRadius: "5px",

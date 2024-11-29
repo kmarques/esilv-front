@@ -69,7 +69,7 @@ export default function Table({ getData, onDelete, onEdit, onAdd, theme }) {
 
   return (
     <>
-      {onAdd && (
+      {onAdd && data.length > 0 && (
         <>
           <Button theme={theme} onClick={() => setIsModalOpen(true)}>
             + Create
@@ -133,7 +133,7 @@ export default function Table({ getData, onDelete, onEdit, onAdd, theme }) {
                   <td key={key}>
                     {isEditing?.id === item.id &&
                     key !== "id" &&
-                    formData[key] ? (
+                    formData?.[key] ? (
                       <input
                         name={key}
                         value={formData[key]}

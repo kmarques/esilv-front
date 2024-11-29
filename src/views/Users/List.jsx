@@ -5,94 +5,33 @@
  * Ajouter la possibilité de supprimer un user
  */
 
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import Table from "../../components/Table";
+import Button from "../../components/Button";
+import { UserContext } from "../../contexts/UserProvider";
+import useNotify from "../../hooks/useNotify";
 
-export default function UserList({ theme }) {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function UserList({ navigate }) {
+  const { getData, deleteUser, editUser, addUser } = useContext(UserContext);
+  const notify = useNotify();
 
-  useEffect(() => {
-    /* simule de la lenteur*/ setTimeout(() => {
-      findAll();
-    }, 2000);
-  }, []);
-
-  function findAll(filters = {}) {
-    setLoading(true);
-    const searchParams = new URLSearchParams(filters);
-    return (
-      fetch("http://localhost:3000/users?" + searchParams.toString())
-        .then((res) => res.json())
-        //.then((data) => {
-        //  setUsers(data);
-        //  setLoading(false);
-        //});
-        // <==>
-        .then((data) => setUsers(data) || setLoading(false))
-    );
+  function generateAlert() {
+    // random between success and danger level
+    const level = Math.random() < 0.5 ? "success" : "danger";
+    notify(level, "This is a random alert message " + level);
   }
 
-  function deleteUser(item) {
-    return fetch(`http://localhost:3000/users/${item.id}`, {
-      method: "DELETE",
-    }).then((res) => {
-      if (res.ok) {
-        setUsers(users.filter((user) => user.id !== item.id));
-        alert(`User #${item.id} has been deleted`);
-      }
-    });
-  }
-
-  function editUser(item, newValues) {
-    return fetch(`http://localhost:3000/users/${item.id}`, {
-      method: "PATCH",
-      body: JSON.stringify(newValues),
-      headers: {
-        "Content-type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then(
-        (data) =>
-          setUsers(users.map((user) => (user.id === item.id ? data : user))) ||
-          setLoading(false)
-      );
-  }
-
-  function addUser(newValues) {
-    return fetch("http://localhost:3000/users", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(newValues),
-    })
-      .then((res) => res.json())
-      .then((newUser) => {
-        setUsers([...users, newUser]);
-        setLoading(false);
-      });
-  }
-
-  function getData() {
-    return users.map((item) => ({
-      id: item.id,
-      name: item.name,
-      phone: item.phone,
-      email: item.email,
-      user: item.username,
-    }));
-  }
-
-  if (loading) return <h1>Loading...</h1>;
   return (
-    <Table
-      theme={theme}
-      getData={getData}
-      onDelete={deleteUser}
-      onEdit={editUser}
-      onAdd={addUser}
-    />
+    <>
+      <h1>Liste des utilisateurs</h1>
+      <Button onClick={generateAlert}>Spam alert</Button>
+      <Button onClick={() => navigate("/create")}>Create user</Button>
+      <Table
+        getData={getData}
+        onDelete={deleteUser}
+        onEdit={editUser}
+        onAdd={addUser}
+      />
+    </>
   );
 }
