@@ -1,17 +1,21 @@
+import { useContext } from "react";
+import { ThemeContext } from "../contexts/ThemeProvider";
+
 export default function Button({
   title = "Click on my big big button",
   onClick,
   customStyle = {},
-  backgroundColor = "blue",
-  color = "white",
+  backgroundColor,
+  color,
   variant = "default",
   component: Component = "button",
   children,
   ...others
 }) {
+  const { theme } = useContext(ThemeContext);
   const style = {
-    backgroundColor,
-    color,
+    backgroundColor: backgroundColor ?? theme.button.backgroundColor,
+    color: color ?? theme.button.color,
     padding: "10px",
     border: "none",
     borderRadius: "5px",

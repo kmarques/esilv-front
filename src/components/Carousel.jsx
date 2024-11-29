@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import Button from "./Button";
 
 /**
  * Créer un composant "Carousel" prenant en entrée
@@ -52,6 +53,7 @@ export default function Carousel({
   autoPlay = false,
   withKeyboardShortcuts = false,
   swipeable = false,
+  theme,
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const intervalId = useRef();
@@ -180,7 +182,9 @@ export default function Carousel({
     >
       <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
         {withArrows && currentIndex > 0 && (
-          <span onClick={prevImage}>&lsaquo;</span>
+          <Button theme={theme} variant="text" onClick={prevImage}>
+            &lsaquo;
+          </Button>
         )}
         {portion.map(
           (image, index) =>
@@ -212,7 +216,9 @@ export default function Carousel({
             )
         )}
         {withArrows && currentIndex < data.length - 1 && (
-          <span onClick={nextImage}>&rsaquo;</span>
+          <Button theme={theme} variant="text" onClick={nextImage}>
+            &rsaquo;
+          </Button>
         )}
       </div>
       {withPagination && (

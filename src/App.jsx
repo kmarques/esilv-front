@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -6,6 +6,7 @@ import Button from "./components/Button";
 import Table from "./components/Table";
 import Carousel from "./components/Carousel";
 import UserList from "./views/Users/List";
+import ThemeProvider from "./contexts/ThemeProvider";
 const images = [
   {
     id: 1,
@@ -31,7 +32,7 @@ function App() {
   const list = Array.from({ length: count }, (_, index) => index);
 
   return (
-    <>
+    <ThemeProvider>
       {displayLogo && count > 2 && (
         <div>
           <a href="https://vite.dev" target="_blank">
@@ -121,12 +122,12 @@ function App() {
           {list.length === 0 && <li>No items</li>}
         </ul>
         <Table
-          data={[
+          getData={() => [
             { id: 1, name: "Dupond", role: "Admin", source: "User" },
             { id: 1, name: "Dupond", role: "Admin", source: "Client" },
           ]}
         />
-        <Table data={[]} />
+        <Table getData={() => []} />
         <Carousel data={images} swipeable={true} />
         <Carousel data={images} withArrows withKeyboardShortcuts={true} />
         <Carousel
@@ -153,7 +154,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-    </>
+    </ThemeProvider>
   );
 }
 
