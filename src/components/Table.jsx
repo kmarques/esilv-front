@@ -35,8 +35,9 @@ import Modal from "./Modal";
 
 export default function Table({ getData, onDelete, onEdit, onAdd, theme }) {
   const data = getData();
+  console.log(data);
   const columnKeys = data.length ? Object.keys(data[0]) : [""];
-
+  console.log(columnKeys);
   const [hiddenColumns, setHiddenColumns] = useState([]);
   const [isEditing, setIsEditing] = useState({});
   const [formData, setFormData] = useState({});

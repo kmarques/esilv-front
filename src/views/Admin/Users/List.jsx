@@ -6,13 +6,15 @@
  */
 
 import { useContext } from "react";
-import Table from "../../components/Table";
-import Button from "../../components/Button";
-import { UserContext } from "../../contexts/UserProvider";
-import useNotify from "../../hooks/useNotify";
+import Table from "../../../components/Table";
+import Button from "../../../components/Button";
+import { UserContext } from "../../../contexts/UserProvider";
+import useNotify from "../../../hooks/useNotify";
+import { Link, useNavigate } from "react-router";
 
-export default function UserList({ navigate }) {
+export default function UserList() {
   const { getData, deleteUser, editUser, addUser } = useContext(UserContext);
+  const navigate = useNavigate();
   const notify = useNotify();
 
   function generateAlert() {
@@ -25,7 +27,12 @@ export default function UserList({ navigate }) {
     <>
       <h1>Liste des utilisateurs</h1>
       <Button onClick={generateAlert}>Spam alert</Button>
-      <Button onClick={() => navigate("/create")}>Create user</Button>
+      <Button component={Link} to="/admin/users/create">
+        Create user (with Link)
+      </Button>
+      <Button onClick={() => navigate("/admin/users/create")}>
+        Create user (with navigate)
+      </Button>
       <Table
         getData={getData}
         onDelete={deleteUser}

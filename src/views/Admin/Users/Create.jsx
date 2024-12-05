@@ -1,11 +1,13 @@
 import { useContext } from "react";
-import Button from "../../components/Button";
-import { UserContext } from "../../contexts/UserProvider";
-import useNotify from "../../hooks/useNotify";
+import Button from "../../../components/Button";
+import { UserContext } from "../../../contexts/UserProvider";
+import useNotify from "../../../hooks/useNotify";
+import { useNavigate } from "react-router";
 
-export default function UserCreate({ navigate }) {
+export default function UserCreate() {
   const { addUser } = useContext(UserContext);
   const notify = useNotify();
+  const navigate = useNavigate();
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -15,7 +17,7 @@ export default function UserCreate({ navigate }) {
 
     addUser(data)
       .then(() => notify("success", "User created"))
-      .then(() => navigate("/"));
+      .then(() => navigate("/admin/users"));
   }
 
   return (
